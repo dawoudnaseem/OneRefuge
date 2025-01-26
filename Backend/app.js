@@ -33,11 +33,78 @@ app.post("/signup", (req, res) => {
 
     db.query(query, values, (err, result) => {
       if (err) {
-        console.error("Error inserting data into the database:", err);
-        res.status(500).send("Error saving data. Please try again.");
-        return;
+        res.send(`
+          <script>
+            alert("Sign-up successful! Redirecting to the sign in page");
+            window.location.href = "/signin.html";
+          </script>
+        `);
       }
       console.log("User data inserted:", result);
+      res.redirect("/signin.html");
+    });
+  });
+  app.post("/signin", (req, res) => {
+    const { username,password } = req.body;
+  
+    const query = `
+      SELECT * 
+      FROM UserInfo
+      WHERE Name = ?
+        AND Password = ?
+    `;
+    const values = [username,password];
+  
+    db.query(query, values, (err, results) => {
+      if (err) {
+        console.error("Error querying the database:", err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+  
+      if (results.length > 0) {
+        res.send(`
+          <script>
+            alert("Sign-in successful! Redirecting to the dashboard...");
+            window.location.href = "/homiepagie2.html";
+          </script>
+        `);
+      } else {
+        // No match found
+        res.send("No matching user found.");
+      }
+    });
+  });
+  app.post("/forgot", (req, res) => {
+    const { username,email } = req.body;
+  
+    const query = `
+      SELECT * 
+      FROM UserInfo
+      WHERE Name = ?
+        AND Email = ?
+    `;
+    const values = [username,email];
+  
+    db.query(query, values, (err, results) => {
+      if (err) {
+        res.send(`
+          <script>
+            alert("Wrong email or password, please try again");
+          </script>
+        `);
+      }
+      if (results.length > 0) {
+        res.send(`
+          <script>
+            alert("Sign-in successful! Redirecting to the dashboard...");
+            window.location.href = "/homiepagie2.html";
+          </script>
+        `);
+      } else {
+        // No match found
+        res.send("No matching user found.");
+      }
     });
   });
 // Start the server on port 3000

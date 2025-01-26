@@ -26,25 +26,38 @@ db.connect((err) => {
   console.log("Connected to the database!");
 });
 app.post("/signup", (req, res) => {
-  const { username, email, password, phone, DateofBirth, language, CountryOfOrigin } =
-    req.body;
-    const query = `
-    INSERT INTO UserInfo (Name, Email, Password, Phone, DateOfBirth, CountryOfOrigin, Language) values (?,?,?,?,?,?,?)`;
-    const values = [username, email, password, phone, DateofBirth, language,CountryOfOrigin];
+  const { username, email, password, phone, DateofBirth, language, CountryOfOrigin } = req.body;
 
-    db.query(query, values, (err, result) => {
-      if (err) {
-        res.send(`
-          <script>
-            alert("Sign-up successful! Redirecting to the sign in page");
-            window.location.href = "/signin.html";
-          </script>
-        `);
-      }
-      console.log("User data inserted:", result);
-      res.redirect("/signin.html");
-    });
+  // SQL query to insert data into the database
+  const query = `
+    INSERT INTO UserInfo (Name, Email, Password, Phone, DateOfBirth, CountryOfOrigin, Language) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const values = [username, email, password, phone, DateofBirth, CountryOfOrigin, language];
+
+  // Execute the query
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Database insertion error:", err);
+      res.status(500).send(`
+        <script>
+          alert("Sign-up failed. Please try again.");
+          window.history.back();
+        </script>
+      `);
+      return;
+    }
+
+    console.log("User successfully signed up:", result);
+    res.send(`
+      <script>
+        alert("Sign-up successful! Redirecting to the sign-in page.");
+        window.location.href = "/signin.html";
+      </script>
+    `);
   });
+});
+
+
   app.post("/signin", (req, res) => {
     const { username,password } = req.body;
   
@@ -100,8 +113,8 @@ app.post("/signup", (req, res) => {
       }
   
       if (results.length > 0) {
-        // Password found
-        const password = results[0].Password; // Extract the password
+
+        const password = results[0].Password; 
         res.send(`
           <script>
             alert("Your password is: ${password}");
@@ -109,7 +122,7 @@ app.post("/signup", (req, res) => {
           </script>
         `);
       } else {
-        // No matching user found
+
         res.send(`
           <script>
             alert("No matching account found with the provided username and email.");
@@ -119,7 +132,7 @@ app.post("/signup", (req, res) => {
     });
   });
   
-// Start the server on port 3000
+
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

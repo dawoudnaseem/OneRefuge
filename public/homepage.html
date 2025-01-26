@@ -277,7 +277,7 @@
       <p>Job Opportunities</p></a>
     </div>
   </div>
-  <div id="chatbot" style="position: fixed; bottom: 20px; right: 20px; width: 300px; background: white; border: 1px solid #ccc; border-radius: 10px; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+  <div id="chatbot" draggable style=" bottom: 20px; color:white;right: 20px; width: 300px; background: black; border: 1px solid #ccc; border-radius: 10px; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
     <h4 style="margin: 0; text-align: center;">Chat with OneRefuge!</h4>
     <div id="chat-window" style="height: 200px; overflow-y: auto; margin-bottom: 10px; padding: 5px; border: 1px solid #ddd; background-color: #f9f9f9;"></div>
     <textarea id="chat-input" placeholder="Type your question..." style="width: 100%; margin-bottom: 5px;"></textarea>
@@ -286,28 +286,27 @@
   
   
   <script>
-   document.getElementById("send-btn").addEventListener("click", async () => {
-  const userMessage = document.getElementById("chat-input").value;
-  if (!userMessage) return;
-
-  // Display user message
-  const chatWindow = document.getElementById("chat-window");
-  chatWindow.innerHTML += `<div style="text-align: right; margin-bottom: 5px; color: blue;">You: ${userMessage}</div>`;
-
-  // Send message to the chatbot API
-  const response = await fetch("/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message: userMessage }),
-  });
-  const data = await response.json();
-
-  // Display chatbot response
-  chatWindow.innerHTML += `<div style="text-align: left; margin-bottom: 5px; color: green;">Bot: ${data.response}</div>`;
-  document.getElementById("chat-input").value = "";
-  chatWindow.scrollTop = chatWindow.scrollHeight;
-});
-
+    document.getElementById("send-btn").addEventListener("click", async () => {
+      const userMessage = document.getElementById("chat-input").value;
+      if (!userMessage) return;
+  
+      // Display user message
+      const chatWindow = document.getElementById("chat-window");
+      chatWindow.innerHTML += `<div style="text-align: right; margin-bottom: 5px; color: blue;  ">You: ${userMessage}</div>`;
+  
+      // Send message to the chatbot API
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage }),
+      });
+      const data = await response.json();
+  
+      // Display chatbot response
+      chatWindow.innerHTML += `<div style="text-align: left; margin-bottom: 5px; color: green;">Bot: ${data.response}</div>`;
+      document.getElementById("chat-input").value = "";
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    });
   </script>
   
   <script>

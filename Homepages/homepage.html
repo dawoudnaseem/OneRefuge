@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OneRefuge Homepage - Dark Mode</title>
+  <style>
+    :root {
+      --background: #121212;
+      --surface: #1E1E1E;
+      --primary: #BB86FC;
+      --secondary: #03DAC6;
+      --text-primary: #E0E0E0;
+      --text-secondary: #A6A6A6;
+      --hover-surface: #2C2C2C;
+      --focus-outline: #BB86FC;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--background);
+      color: var(--text-primary);
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      height: 100vh;
+      background-color: var(--surface);
+      padding: 3rem;
+      overflow: hidden;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        flex-direction: column;
+        text-align: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .hero-content {
+        padding-right: 0;
+      }
+
+      .hero-image {
+        margin-top: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .hero-image img {
+        max-width: 100%;
+      }
+    }
+
+    .hero-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-right: 2rem;
+    }
+
+    .hero-content h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+    }
+
+    .hero-content button {
+      background-color: var(--primary);
+      color: #000;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 1.2rem;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .hero-content button:hover {
+      background-color: var(--secondary);
+    }
+
+    .hero-content button:focus {
+      outline: 3px solid var(--focus-outline);
+      outline-offset: 2px;
+    }
+
+    .hero-image {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-image img {
+      max-width: 80%;
+      height: auto;
+      border-radius: 1rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .buttons-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 2rem;
+      padding: 4rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      background-color: var(--background);
+    }
+
+    .button-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: var(--surface);
+      padding: 1.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+      transition: background-color 0.3s;
+    }
+
+    .button-card:hover {
+      background-color: var(--hover-surface);
+    }
+
+    .button-card p {
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--text-primary);
+    }
+
+    .menu {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
+
+    .menu div {
+      width: 30px;
+      height: 3px;
+      background-color: var(--text-primary);
+      margin: 6px 0;
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 300px;
+      height: 100%;
+      background-color: var(--surface);
+      color: var(--text-primary);
+      padding: 2rem;
+      box-shadow: -4px 0 6px rgba(0, 0, 0, 0.5);
+      transition: right 0.3s ease-in-out;
+    }
+
+    .sidebar.active {
+      right: 0;
+    }
+
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .sidebar ul li {
+      margin: 1rem 0;
+    }
+
+    .sidebar ul li a {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    .sidebar ul li a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Organization Name and Logo -->
+  <div class="organization-header" style="position: absolute; top: 1rem; left: 1rem; display: flex; align-items: center; gap: 0.5rem; z-index: 1000;">
+    <img src="./logo.png" alt="Organization Logo" style="height: 40px; width: auto; border-radius: 0.25rem;">
+    <span style="color: var(--primary); font-size: 1.5rem; font-weight: bold;">OneRefuge</span>
+  </div>
+  
+  <!-- Hamburger Menu -->
+  <div class="menu" onclick="toggleSidebar()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <!-- Sidebar Menu -->
+  <div class="sidebar" id="sidebar">
+    <ul>
+      <li><a href="signin.html">Log In</a></li>
+      <li><a href="signup.html">Sign Up</a></li>
+      <li><a href="#healthcare">Healthcare</a></li>
+      <li><a href="#communities">Communities</a></li>
+      <li><a href="#legalities">Legalities</a></li>
+      <li><a href="#housing">Housing</a></li>
+      <li><a href="#food-services">Food Services</a></li>
+      <li><a href="#jobs">Job Opportunities</a></li>
+    </ul>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Navigate New Beginnings With Confidence</h1>
+      <p>Discover resources, communities, and support to thrive in your new home.</p>
+      <button>Explore Now</button>
+    </div>
+    <div class="hero-image">
+      <img src="./image-asset.jpeg" alt="A hopeful and inspiring scene">
+    </div>
+  </div>
+  <br>
+  <div class="intro-section">
+    <h2 style="text-align: center; color: var(--primary); font-size: 2rem; margin-bottom: 1rem;">Explore the Essential Services at Your Fingertips</h2>
+    <hr style="width: 50%;">
+    <br>
+    <p style="text-align: center; color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 2rem;">
+      We’ve gathered everything you need to thrive in your new home.
+    </p>
+
+    <p style="text-align: center; color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 2rem;">
+      Click on the categories below to find resources, communities, and opportunities tailored for you.
+    </p>
+  </div>
+
+  <!-- Scrollable Section -->
+  <div class="buttons-section">
+    <div id="health1" class="button-card">
+      <p>Healthcare</p>
+    </div>
+    <div id="community2" class="button-card">
+      <p>Communities</p>
+    </div>
+    <div id="legal3" class="button-card">
+      <p>Legalities</p>
+    </div>
+    <div id="house4" class="button-card">
+      <p>Housing</p>
+    </div>
+    <div class="button-card">
+      <p>Food Services</p>
+    </div>
+    <div class="button-card">
+      <p>Job Opportunities</p>
+    </div>
+  </div>
+
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('active');
+    }
+
+    document.querySelector('.hero button').addEventListener('click', () => {
+      document.querySelector('.buttons-section').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>

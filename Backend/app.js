@@ -76,37 +76,48 @@ app.post("/signup", (req, res) => {
     });
   });
   app.post("/forgot", (req, res) => {
-    const { username,email } = req.body;
+    const { username, email } = req.body;
   
     const query = `
-      SELECT * 
+      SELECT Password 
       FROM UserInfo
       WHERE Name = ?
         AND Email = ?
     `;
-    const values = [username,email];
+    const values = [username, email];
   
     db.query(query, values, (err, results) => {
       if (err) {
-        res.send(`
+        console.error("Database error:", err);
+        res.status(500).send(`
           <script>
-            alert("Wrong email or password, please try again");
+            alert("An error occurred. Please try again later.");
+            window.history.back();
           </script>
         `);
+        return;
       }
+  
       if (results.length > 0) {
+        // Password found
+        const password = results[0].Password; // Extract the password
         res.send(`
           <script>
-            alert("Sign-in successful! Redirecting to the dashboard...");
-            window.location.href = "/homiepagie2.html";
+            alert("Your password is: ${password}");
+            window.location.href = "/signin.html";
           </script>
         `);
       } else {
-        // No match found
-        res.send("No matching user found.");
+        // No matching user found
+        res.send(`
+          <script>
+            alert("No matching account found with the provided username and email.");
+          </script>
+        `);
       }
     });
   });
+  
 // Start the server on port 3000
 const PORT = 3000;
 app.listen(PORT, () => {

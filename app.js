@@ -3,7 +3,7 @@ const mysql = require("mysql");
 const bodyParser = require("body-parser");
 const path = require("path");
 const app = express();
-
+const fs = require('fs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -27,27 +27,22 @@ db.connect((err) => {
 });
 app.post("/signup", (req, res) => {
   const { username, email, password, phone, DateofBirth, language, CountryOfOrigin } = req.body;
-
-  // SQL query to insert data into the database
   const query = `
     INSERT INTO UserInfo (Name, Email, Password, Phone, DateOfBirth, CountryOfOrigin, Language) 
     VALUES (?, ?, ?, ?, ?, ?, ?)`;
   const values = [username, email, password, phone, DateofBirth, CountryOfOrigin, language];
-
-  // Execute the query
   db.query(query, values, (err, result) => {
     if (err) {
-      console.error("Database insertion error:", err);
+      console.error("Error inserting data into database:", err);
       res.status(500).send(`
         <script>
           alert("Sign-up failed. Please try again.");
-          window.history.back();
+          window.history.back(); // Go back to the sign-up form
         </script>
       `);
-      return;
+      return; 
     }
-
-    console.log("User successfully signed up:", result);
+    console.log("User data inserted successfully:", result);
     res.send(`
       <script>
         alert("Sign-up successful! Redirecting to the sign-in page.");
@@ -56,7 +51,6 @@ app.post("/signup", (req, res) => {
     `);
   });
 });
-
 
   app.post("/signin", (req, res) => {
     const { username,password } = req.body;
@@ -132,7 +126,62 @@ app.post("/signup", (req, res) => {
     });
   });
   
-
+  function extractContent(filePath) {
+    try {
+      const fileContent = fs.readFileSync(filePath, "utf-8");
+      return fileContent.replace(/<[^>]*>?/gm, ""); 
+    } catch (err) {
+      console.error("Error reading file:", err);
+      return "";
+    }
+  }
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public/homepage.html"));
+  });
+  
+  const pages = {
+    homepage: extractContent(path.join(__dirname, "./public/homepage.html")),
+    communities: extractContent(path.join(__dirname, "./public/communities.html")),
+    healthcare: extractContent(path.join(__dirname, "./public/healthcare.html")),
+    legalities: extractContent(path.join(__dirname, "./public/legalities.html")),
+    housing: extractContent(path.join(__dirname, "./public/housing.html")),
+  };
+  
+  
+  
+  app.post("/chat", async (req, res) => {
+    const userMessage = req.body.message;
+  
+  
+    const websiteContent = Object.entries(pages)
+      .map(([page, content]) => `${page.toUpperCase()}:\n${content}`)
+      .join("\n\n");
+  
+  
+    try {
+      const response = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-4",
+          messages: [
+            { role: "system", content: "You are a chatbot for the OneRefuge website. Answer questions by quoting relevant website content." },
+            { role: "user", content: `Here is the website content:\n\n${websiteContent}\n\nUser question: ${userMessage}` },
+          ],
+        },
+        {
+          headers: {
+            Authorization: `Bearer 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`,
+          },
+        }
+      );
+  
+      const botResponse = response.data.choices[0].message.content;
+      res.json({ response: botResponse });
+    } catch (error) {
+      console.error("Error with OpenAI API:", error.message);
+      res.status(500).json({ response: "I'm sorry, something went wrong." });
+    }
+  });
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

@@ -170,7 +170,7 @@ app.post("/signup", (req, res) => {
         },
         {
           headers: {
-            Authorization: `Bearer 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`,
+
           },
         }
       );

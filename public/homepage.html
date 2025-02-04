@@ -202,34 +202,34 @@
   </style>
 </head>
 <body>
-  <!-- Organization Name and Logo -->
+
   <div class="organization-header" style="position: absolute; top: 1rem; left: 1rem; display: flex; align-items: center; gap: 0.5rem; z-index: 1000;">
-    <img src="../Images/ONE-REFUGE-LOGO.png" alt="Organization Logo" style="height: 40px; width: auto; border-radius: 0.25rem;">
+    <img src="image.png" alt="Organization Logo" style="height: 40px; width: auto; border-radius: 0.25rem;">
     <span style="color: var(--primary); font-size: 1.5rem; font-weight: bold;">OneRefuge</span>
   </div>
   
-  <!-- Hamburger Menu -->
+
   <div class="menu" onclick="toggleSidebar()">
     <div></div>
     <div></div>
     <div></div>
   </div>
 
-  <!-- Sidebar Menu -->
+
   <div class="sidebar" id="sidebar">
     <ul>
-      <li><a href="../Credentials/signin.html">Log In</a></li>
-      <li><a href="../Credentials/signup.html">Sign Up</a></li>
-      <li><a href="../Webpages/healthcare.html">Healthcare</a></li>
-      <li><a href="../Webpages/communities.html">Communities</a></li>
-      <li><a href="../Webpages/legalities.html">Legalities</a></li>
-      <li><a href="../Webpages/housing.html">Housing</a></li>
-      <li><a href="../Webpages/foodservices.html">Food Services</a></li>
-      <li><a href="../Webpages/jobs.html">Job Opportunities</a></li>
+      <li><a href="./signin.html">Log In</a></li>
+      <li><a href="./signup.html">Sign Up</a></li>
+      <li><a href="./healthcare.html">Healthcare</a></li>
+      <li><a href="./communities.html">Communities</a></li>
+      <li><a href="./legalities.html">Legalities</a></li>
+      <li><a href="./housing.html">Housing</a></li>
+      <li><a href="./foodservices.html">Food Services</a></li>
+      <li><a href="./jobs.html">Job Opportunities</a></li>
     </ul>
   </div>
 
-  <!-- Hero Section -->
+
   <div class="hero">
     <div class="hero-content">
       <h1>Navigate New Beginnings With Confidence</h1>
@@ -237,7 +237,7 @@
       <button>Explore Now</button>
     </div>
     <div class="hero-image">
-      <img src="../Images/image-asset.jpeg" alt="A hopeful and inspiring scene">
+      <img src="image-asset.jpeg" alt="A hopeful and inspiring scene">
     </div>
   </div>
   <br>
@@ -254,30 +254,61 @@
     </p>
   </div>
 
-  <!-- Scrollable Section -->
+
   <div class="buttons-section">
-    <div> <a href="../Webpages/healthcare.html" class="button-card">
+    <div> <a href="./healthcare.html" class="button-card">
       <p>Healthcare</p>
     </a>
     </div>
-    <div> <a href="../Webpages/communities.html" class="button-card">
+    <div> <a href="./communities.html" class="button-card">
       <p>Communities</p>
     </a>
     </div>
-    <div><a href="../Webpages/legalities.html" class="button-card">
+    <div><a href="./legalities.html" class="button-card">
       <p>Legalities</p></a>
     </div>
-    <div><a href="../Webpages/housing.html" class="button-card">
+    <div><a href="./housing.html" class="button-card">
       <p>Housing</p></a>
     </div>
-    <div><a href="../Webpages/foodservices.html" class="button-card">
+    <div><a href="./foodservices.html" class="button-card">
       <p>Food Services</p></a>
     </div>
-    <div><a href="../Webpages/jobs.html" class="button-card">
+    <div><a href="./jobs.html" class="button-card">
       <p>Job Opportunities</p></a>
     </div>
   </div>
-
+  <div id="chatbot" draggable style=" bottom: 20px; color:white;right: 20px; width: 300px; background: black; border: 1px solid #ccc; border-radius: 10px; padding: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <h4 style="margin: 0; text-align: center;">Chat with OneRefuge!</h4>
+    <div id="chat-window" style="height: 200px; overflow-y: auto; margin-bottom: 10px; padding: 5px; border: 1px solid #ddd; background-color: #f9f9f9;"></div>
+    <textarea id="chat-input" placeholder="Type your question..." style="width: 100%; margin-bottom: 5px;"></textarea>
+    <button id="send-btn" style="width: 100%; background-color: #007BFF; color: white; border: none; padding: 5px; border-radius: 5px;">Send</button>
+  </div>
+  
+  
+  <script>
+    document.getElementById("send-btn").addEventListener("click", async () => {
+      const userMessage = document.getElementById("chat-input").value;
+      if (!userMessage) return;
+  
+      // Display user message
+      const chatWindow = document.getElementById("chat-window");
+      chatWindow.innerHTML += `<div style="text-align: right; margin-bottom: 5px; color: blue;  ">You: ${userMessage}</div>`;
+  
+      // Send message to the chatbot API
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage }),
+      });
+      const data = await response.json();
+  
+      // Display chatbot response
+      chatWindow.innerHTML += `<div style="text-align: left; margin-bottom: 5px; color: green;">Bot: ${data.response}</div>`;
+      document.getElementById("chat-input").value = "";
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    });
+  </script>
+  
   <script>
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');

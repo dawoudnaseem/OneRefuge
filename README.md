@@ -28,7 +28,9 @@ refugees settling in Canada such as:
 
 ## How to access the website's front-end?
 
-We currently are not hosting this websit so the only way to access the website is through your own server. You can use Visual Studio Code to do so. Follow the steps below to have access to the front-end (back-end instruction will follow).
+There are two ways that you can get access to the website. You can either click the following link (hosted on Github): https://dawoudnaseem.github.io/OneRefuge/ or you can follow the steps below in case Github ever stops hosting the website.
+
+The second method to access the website is through your own local server (on your computer). You can use Visual Studio Code to do so. Follow the steps below to have access to the front-end (back-end instruction will follow).
 
 1. Clone the repository to your computer (or simply download it manually)
 
